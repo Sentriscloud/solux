@@ -1,88 +1,79 @@
-# Solux Wallet — Sentrix Chain
+# Solux
 
-Flutter crypto wallet app untuk Sentrix (SRX) blockchain.
+Self-custody mobile wallet for [Sentrix Chain](https://sentrixchain.com) (SRX). Flutter, multi-platform (Android primary; iOS, macOS, Linux, Windows targets supported).
 
-## Dev Info
-
-**Flutter:** 3.41.6 stable  
-**Device ADB ID:** `9XMR8D8XVCVW7LGA` (Xiaomi 2407FPN8EG, Android 16)  
-**Flutter path:** `E:\apk\flutter\bin\flutter`
-
-```bash
-# Run di HP
-/e/apk/flutter/bin/flutter run -d 9XMR8D8XVCVW7LGA
-
-# Build APK release
-/e/apk/flutter/bin/flutter build apk --release
-# Output: build\app\outputs\flutter-apk\app-release.apk
-
-# Analyze
-/e/apk/flutter/bin/flutter analyze lib/
-```
+Part of the [SentrisCloud](https://github.com/sentriscloud) product suite.
 
 ## Stack
 
-- Flutter + Riverpod (state management)
-- go_router (navigation)
-- google_fonts — SpaceGrotesk untuk balance
-- sensors_plus — accelerometer 3D card tilt
-- qr_flutter — QR address di Profile
-- shared_preferences — persist card skin
+- **Flutter 3.41.6** stable
+- **Riverpod** — state management
+- **go_router** — navigation
+- **google_fonts** — SpaceGrotesk for balance display
+- **sensors_plus** — accelerometer-driven 3D card tilt
+- **qr_flutter** — QR address rendering
+- **shared_preferences** — persisted card skin
 
-## Design System
+## Run
 
-**Palette (GSC dark navy):**
+```bash
+flutter pub get
+flutter run                  # connected device
+flutter build apk --release  # output: build/app/outputs/flutter-apk/app-release.apk
+flutter analyze lib/
+```
+
+## Design system
+
+Dark navy palette (shared with the SentrisCloud brand family):
+
 | Token | Value |
-|-------|-------|
-| bg | `#030712` |
-| bgElevated | `#0A0F1A` |
-| surface | `#0D1426` |
-| textPrimary | `#F1F5F9` |
-| textSecondary | `#8494A7` |
-| emerald | `#10B981` |
-| pink | `#EC4899` |
-| violet | `#A855F7` |
-| indigo | `#6366F1` |
-| cyan | `#22D3EE` |
+|---|---|
+| `bg` | `#030712` |
+| `bgElevated` | `#0A0F1A` |
+| `surface` | `#0D1426` |
+| `textPrimary` | `#F1F5F9` |
+| `textSecondary` | `#8494A7` |
+| `emerald` | `#10B981` |
+| `pink` | `#EC4899` |
+| `violet` | `#A855F7` |
+| `indigo` | `#6366F1` |
+| `cyan` | `#22D3EE` |
 
-## Screens & Routes
+## Routes
 
 | Route | Screen |
-|-------|--------|
-| `/` | HomeScreen |
-| `/activity` | ActivityScreen (filter tabs + grouped date) |
-| `/profile` | ProfileScreen (avatar, stats, assets, actions) |
-| `/send` | SendScreen |
-| `/receive` | ReceiveScreen |
-| `/swap` | SwapScreen |
-| `/stake` | StakeScreen |
-| `/buy` | BuyScreen |
-| `/settings` | SettingsScreen |
+|---|---|
+| `/` | Home |
+| `/activity` | Activity (filter tabs + grouped by date) |
+| `/profile` | Profile (avatar, stats, assets, actions) |
+| `/send` | Send |
+| `/receive` | Receive |
+| `/swap` | Swap |
+| `/stake` | Stake |
+| `/buy` | Buy |
+| `/settings` | Settings |
 | `/dapps` | Placeholder |
 
-## Balance Card
+## Balance card
 
-`MetalBalanceCard` — `lib/widgets/metal_balance_card.dart`  
-- Black metal (#0D0D0D) + debossed hexagon texture
-- `HexagonTexturePainter` — pointy-top hex grid dengan light/dark edge emboss effect
-- Accelerometer 3D tilt (sensors_plus)
-- Balance hide/show toggle (balanceHiddenProvider)
+`MetalBalanceCard` (`lib/widgets/metal_balance_card.dart`) — black metal (`#0D0D0D`) base with a debossed hexagon texture, accelerometer-driven 3D tilt, and a balance hide/show toggle (`balanceHiddenProvider`). The hex grid is rendered by `HexagonTexturePainter` with light/dark edge emboss.
 
-## Card Skin System
+## Card skins
 
-5 skins di Settings (skinConfigs di `lib/models/card_skin.dart`):
+Five skins selectable in Settings (configs in `lib/models/card_skin.dart`):
 
 | Skin | Pattern | Colors |
-|------|---------|--------|
+|---|---|---|
 | Neon | Diagonal neon beams | cyan / violet / pink |
 | Circuit | PCB traces + particles | teal / sky blue |
 | Hex | Hex grid + neon glow | electric blue / cyan |
 | Cubes | Iso cubes + accent cube | pink accent |
 | Stealth | Etched hex emboss | monochromatic black |
 
-> Skin selector ada di Settings tapi Home screen pakai `MetalBalanceCard` (fixed design). Skin selector bisa di-connect ke MetalBalanceCard kalau dibutuhkan.
+> The skin selector is currently wired to a separate skin card. The Home screen uses `MetalBalanceCard` as a fixed design; the selector can be connected to it later if needed.
 
-## Key Files
+## Key files
 
 ```
 lib/
@@ -92,29 +83,48 @@ lib/
 │   ├── transaction.dart          ← Tx model + TxType enum
 │   ├── token.dart
 │   └── card_skin.dart            ← CardSkin enum + SkinConfig
-├── data/mock_data.dart           ← mockTokens, mockTxs, mockTxsExtended
+├── data/mock_data.dart           ← mockTokens, mockTxs
 ├── providers/
 │   ├── wallet_provider.dart      ← balanceHiddenProvider, tokensProvider, txsProvider
 │   └── skin_provider.dart        ← cardSkinProvider (persisted)
 ├── widgets/
-│   ├── metal_balance_card.dart   ← balance card utama
+│   ├── metal_balance_card.dart   ← primary balance card
 │   ├── bottom_nav.dart           ← custom center-FAB bottom nav
 │   └── token_icon.dart
 └── screens/
     ├── home/widgets/
-    │   ├── action_buttons.dart   ← Send/Receive/Swap/Stake/Buy
+    │   ├── action_buttons.dart   ← Send / Receive / Swap / Stake / Buy
     │   ├── asset_list.dart       ← token rows + dividers
     │   ├── activity_list.dart    ← recent activity mini list
     │   ├── aurora_painter.dart   ← BgOrbPainter, CardGeometricPainter
-    │   └── card_patterns.dart    ← 5 CustomPainter skin patterns
+    │   └── card_patterns.dart    ← five CustomPainter skin patterns
     ├── activity/activity_screen.dart
     ├── profile/profile_screen.dart
     └── settings/settings_screen.dart
 ```
 
-## TODO
+## Roadmap
 
-- [ ] Dapps screen (masih placeholder)
-- [ ] Real blockchain data integration (saat ini mock)
-- [ ] Onboarding / create wallet flow
-- [ ] Connect card skin system ke MetalBalanceCard
+- [ ] dApps screen (currently placeholder)
+- [ ] Real blockchain integration (currently mock data)
+- [ ] Onboarding / create-wallet flow
+- [ ] Wire card skin selector to `MetalBalanceCard`
+
+## Bundle identifiers
+
+| Platform | Identifier |
+|---|---|
+| Android | `com.sentriscloud.solux` |
+| iOS | `com.sentriscloud.solux` |
+| macOS | `com.sentriscloud.solux` |
+| Linux GTK app ID | `com.sentriscloud.solux` |
+
+## License
+
+TBD.
+
+## Related
+
+- [Sentrix Chain](https://sentrixchain.com) — the L1
+- [sentrix-labs/sentrix](https://github.com/sentrix-labs/sentrix) — chain core (Rust)
+- [sentriscloud/frontend](https://github.com/sentriscloud/frontend) — TypeScript apps monorepo

@@ -1,4 +1,4 @@
-package com.sentrix.sentrix_wallet
+package com.sentriscloud.solux
 
 import io.flutter.embedding.android.FlutterActivity
 

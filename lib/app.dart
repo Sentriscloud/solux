@@ -28,8 +28,8 @@ final _router = GoRouter(
   ],
 );
 
-class SentrixWalletApp extends StatelessWidget {
-  const SentrixWalletApp({super.key});
+class SoluxApp extends StatelessWidget {
+  const SoluxApp({super.key});
 
   @override
   Widget build(BuildContext context) {

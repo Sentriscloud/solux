@@ -353,7 +353,11 @@ class _SwitchRow extends StatelessWidget {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeThumbColor: Colors.white,
+            // activeThumbColor / inactiveThumbColor / activeTrackColor /
+            // inactiveTrackColor were renamed in Flutter 3.32+. Build host
+            // is on 3.29.2 — use the legacy `activeColor` + thumb/track
+            // overrides via WidgetStateProperty until the toolchain bumps.
+            activeColor: Colors.white,
             activeTrackColor: AppColors.violet,
             inactiveThumbColor: AppColors.textMuted,
             inactiveTrackColor: AppColors.glassBorder,

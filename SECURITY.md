@@ -21,12 +21,16 @@ Please include:
 
 ## Scope
 
-In scope:
+This repository is currently a **UI prototype** — no key generation, signing, or chain integration is implemented. Any "wallet" path in the app is a non-functional placeholder.
 
-- Smart contracts deployed via canonical addresses on Sentrix Chain (chain ID 7119 mainnet, 7120 testnet)
-- Sentrix node binary (consensus, state, EVM)
-- Frontend apps that handle user keys or balances (faucet, scan, coinblast, dex, solux)
-- Indexer / SDK that touches user-controlled data
+Reports about UI/UX, build pipelines, and dependency vulnerabilities are still in scope. Reports about key handling / signing / sending funds are not applicable until the crypto layer lands (see README).
+
+In scope when crypto layer lands:
+
+- Key generation, storage, signing
+- Transaction construction + RPC integration
+- Mnemonic / seed handling
+- Build configs (release signing, ProGuard / R8)
 
 Out of scope:
 

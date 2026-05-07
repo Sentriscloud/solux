@@ -1,5 +1,10 @@
 # Solux
 
+[![CI](https://github.com/Sentriscloud/solux/actions/workflows/ci.yml/badge.svg)](https://github.com/Sentriscloud/solux/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/Sentriscloud/solux)](LICENSE)
+[![Latest release](https://img.shields.io/github/v/release/Sentriscloud/solux?include_prereleases&sort=semver)](https://github.com/Sentriscloud/solux/releases/latest)
+
+
 Self-custody mobile wallet for [Sentrix Chain](https://sentrixchain.com) (SRX). Flutter, multi-platform (Android primary; iOS, macOS, Linux, Windows targets supported).
 
 Part of the [SentrisCloud](https://github.com/sentriscloud) product suite.

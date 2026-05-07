@@ -5,7 +5,9 @@
 [![Latest release](https://img.shields.io/github/v/release/Sentriscloud/solux?include_prereleases&sort=semver)](https://github.com/Sentriscloud/solux/releases/latest)
 
 
-Self-custody mobile wallet for [Sentrix Chain](https://sentrixchain.com) (SRX). Flutter, multi-platform (Android primary; iOS, macOS, Linux, Windows targets supported).
+> ⚠️ **PROTOTYPE — DO NOT SEND REAL FUNDS.** This repository currently contains UI scaffolding only. There is no key generation, no signing, no on-chain integration. The "send", "view seed phrase", and "export private key" buttons are non-functional placeholders. Treat any APK built from this repository as a design preview, NOT a working wallet. Crypto layer (key gen, BIP-39 seed, transaction signing, RPC integration) is on the roadmap; this README will be updated when those land.
+
+UI prototype for a future self-custody mobile wallet on [Sentrix Chain](https://sentrixchain.com) (SRX). Flutter, multi-platform (Android primary; iOS, macOS, Linux, Windows targets supported).
 
 Part of the [SentrisCloud](https://github.com/sentriscloud) product suite.
 

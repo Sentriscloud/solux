@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -30,11 +32,52 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        // Release signing: configured via local key.properties (NOT committed) OR
+        // CI-injected env vars (SOLUX_KEYSTORE_PATH / _PASSWORD / _KEY_ALIAS / _KEY_PASSWORD).
+        // Falls back to debug keystore only in dev builds — release builds without a
+        // properly-configured release keystore will fail with a clear error.
+        create("release") {
+            val keyPropsFile = rootProject.file("key.properties")
+            if (keyPropsFile.exists()) {
+                val keyProps = Properties().apply {
+                    load(keyPropsFile.inputStream())
+                }
+                storeFile = file(keyProps.getProperty("storeFile") ?: "")
+                storePassword = keyProps.getProperty("storePassword") ?: ""
+                keyAlias = keyProps.getProperty("keyAlias") ?: ""
+                keyPassword = keyProps.getProperty("keyPassword") ?: ""
+            } else {
+                System.getenv("SOLUX_KEYSTORE_PATH")?.let {
+                    storeFile = file(it)
+                    storePassword = System.getenv("SOLUX_KEYSTORE_PASSWORD") ?: ""
+                    keyAlias = System.getenv("SOLUX_KEY_ALIAS") ?: ""
+                    keyPassword = System.getenv("SOLUX_KEY_PASSWORD") ?: ""
+                }
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // Audit H2 (2026-05-07): release builds previously signed with the debug
+            // keystore — anyone could resign the published APK and impersonate Solux.
+            // Now signs with the release config (loaded from key.properties or
+            // CI env vars). Build fails fast if neither is provided.
+            signingConfig = signingConfigs.findByName("release")
+                ?: throw GradleException("Release signing config not found. Provide " +
+                    "key.properties OR set SOLUX_KEYSTORE_* env vars before building.")
+
+            // Audit H3 (2026-05-07): R8 minify + resource shrinking. When the crypto
+            // layer lands, an unminified release binary lets attackers read keystore
+            // logic + signing flow trivially. Enabling R8 now (pre-crypto) so the
+            // discipline is in place before any sensitive code lands.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }

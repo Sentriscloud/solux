@@ -1,0 +1,31 @@
+language: en-US
+early_access: false
+reviews:
+  profile: assertive
+  high_level_summary: true
+  poem: false
+  review_status: false
+  changed_files_summary: false
+  collapse_walkthrough: true
+  auto_review:
+    enabled: true
+    drafts: false
+  path_filters:
+    - "!**/build/**"
+    - "!**/.dart_tool/**"
+    - "!**/Pods/**"
+    - "!ios/Runner.xcworkspace/**"
+    - "!android/.gradle/**"
+  path_instructions:
+    - path: "lib/wallet/**"
+      instructions: |
+        Self-custody wallet — secret key material lives here.
+        - Secrets NEVER logged (no print(privateKey), no debugPrint(seed), no Sentry/Crashlytics capture of mnemonic).
+        - Key derivation MUST use cryptographic RNG (Random.secure(), NOT Random()).
+        - Zeroize secret buffers when no longer needed (clear() before garbage collection).
+        - Display formatters must redact private_key and seed (custom toString that returns "[REDACTED]").
+    - path: "lib/screens/sign*/**"
+      instructions: |
+        Transaction signing surface. User MUST see the exact tx hex + decoded fields before signing — no pre-approval shortcuts. EIP-712 typed-data must show the full domain + message struct.
+chat:
+  auto_reply: true
